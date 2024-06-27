@@ -23,16 +23,19 @@ public:
             return;
         }
 
-        encrypt_ptr encrypt = (encrypt_ptr)GetProcAddress(handle, "ToEncrypt");
-        if (encrypt == nullptr)
-        {
-            cout << "Function not found" << endl;
+        encrypt = (encrypt_ptr)GetProcAddress(handle, "ToEncrypt");
+        if (encrypt == nullptr) {
+            DWORD error = GetLastError();
+            cerr << "Failed to find 'ToEncrypt' function: " << error << endl;
+            FreeLibrary(handle);
             return;
         }
-        decrypt_ptr decrypt = (decrypt_ptr)GetProcAddress(handle, "ToDecrypt");
-        if (decrypt == nullptr)
-        {
-            cout << "Function not found" << endl;
+
+        decrypt = (decrypt_ptr)GetProcAddress(handle, "ToDecrypt");
+        if (decrypt == nullptr) {
+            DWORD error = GetLastError();
+            cerr << "Failed to find 'ToDecrypt' function: " << error << endl;
+            FreeLibrary(handle);
             return;
         }
     }
@@ -63,7 +66,7 @@ public:
 
 int main()
 {
-    CaesarCiper caesar("DLLCaesar.dll");
+    CaesarCiper caesar("D:\\Programming paradigms\\Caesar_Encryption_DLL\\DLLCaesar\\x64\\Debug\\DLLCaesar.dll");
 
     char message[] = "HELLO everyone this is DLL work";
     int key = 2;
