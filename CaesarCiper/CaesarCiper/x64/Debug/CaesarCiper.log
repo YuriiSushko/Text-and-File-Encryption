@@ -1,2 +1,3 @@
 ﻿  CaesarCiper.cpp
+D:\Programming paradigms\Text-and-File-Encryption\CaesarCiper\CaesarCiper.cpp(350,81): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
   CaesarCiper.vcxproj -> D:\Programming paradigms\Text-and-File-Encryption\CaesarCiper\x64\Debug\CaesarCiper.exe

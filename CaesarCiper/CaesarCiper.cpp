@@ -170,10 +170,17 @@ public:
     }
 
     char* get() const {
-        char* string = (char*)calloc(capacity, sizeof(char));
+        char* string = (char*)calloc(length + 1, sizeof(char));
+
+        if (!string) {
+            perror("Failed to allocate");
+            exit(EXIT_FAILURE);
+        }
+
         for (int i = 0; i <= length; i++) {
             string[i] = dynamicArray[i].ch;
         }
+        string[length] = '\0';
         return string;
     }
 
@@ -198,9 +205,9 @@ public:
         dynamicArray = tempArray;
     }
 
-    void append(bool ifItNewLine, int start_position = -1) {
-        int ch;
-        static int index = 0;
+    void append(bool ifItNewLine, int start_position = -1, char* textToSave = nullptr, int size = -1) {
+        int counter = 0;
+        int index = 0;
 
         if (start_position != -1) {
             int ch;
@@ -214,11 +221,15 @@ public:
         }
 
         while (true) {
-            if (ifItNewLine) {
-                ch = '\n';
+            int ch;
+            if (textToSave != nullptr && counter < size) {
+                ch = textToSave[counter++];
+            }
+            else if (!ifItNewLine) {
+                ch = getchar();
             }
             else {
-                ch = getchar();
+                break;
             }
 
             if (!ifItNewLine && ch == '\n') {
@@ -247,7 +258,6 @@ public:
         dynamicArray[index].ch = '\0';
         length = index;
     }
-
 };
 
 
@@ -258,22 +268,16 @@ private:
     CaesarCiper ciper;
 public:
     TextEditor() {
-        CaesarCiper caesar("D:\\Programming paradigms\\Caesar_Encryption_DLL\\DLLCaesar\\x64\\Debug\\DLLCaesar.dll");
+
         int length = text.getLength();
     }
 
-    void print(int cursor_position = -1) const {
+    void print(Text& text) const {
         char* string = text.get();
         int length = text.getLength();
 
         for (int i = 0; i < length; i++) {
-            if (cursor_position == i) {
-                cout << "|";
-            }
             cout << string[i];
-        }
-        if (cursor_position == length) {
-            cout << "|";
         }
         cout << endl;
     }
@@ -285,7 +289,7 @@ public:
         if (file.is_open()) {
             char buffer[256];
             while (file.getline(buffer, sizeof(buffer))) {
-                loadedFile.append(buffer);
+                loadedFile.append(false, -1, buffer, sizeof(buffer));
             }
             file.close();
         }
@@ -308,28 +312,67 @@ public:
 
             file.close();
             std::cout << "Text saved to file: " << filename << std::endl;
+            delete[] string;
         }
         else {
             std::cerr << "Unable to create file: " << filename << std::endl;
         }
     }
 
+    void run() {
+        CaesarCiper ciper("D:\\Programming paradigms\\Caesar_Encryption_DLL\\DLLCaesar\\x64\\Debug\\DLLCaesar.dll");
+        int choice;
+        int key;
 
+        while (true) {
+            cout << "To encrypt enter 1" << endl;
+            cout << "To decrypt enter 2" << endl;
+            cin >> choice;
+            cin.ignore();
+
+            if (choice == 1) {
+                Text filename;
+                Text message;
+                Text messageEncrypted;
+
+                cout << "Enter an output file:" << endl;
+                filename.append(false);
+
+                cout << "Enter a message:" << endl;
+                message.append(false);  
+               
+                cout << "Enter a key:" << endl;
+                cin >> key; 
+
+                char* encrypted_message = ciper.Encrypt(message.get(), key);
+
+                if (encrypted_message != nullptr) {
+                    messageEncrypted.append(false, -1, encrypted_message, strlen(encrypted_message));
+                    cout << messageEncrypted.getLength() << endl;
+                    print(messageEncrypted);
+                    saveToFile(filename.get(), messageEncrypted);
+                    delete[] encrypted_message;
+                }
+                else {
+                    cerr << "Encryption failed" << endl;
+                }
+            }
+            else if (choice == 2) {
+                // Handle decryption
+                // Similar to encryption logic
+            }
+            else {
+                cerr << "Invalid choice" << endl;
+            }
+        }
+    }
 };
 
 
 int main()
 {
-    CaesarCiper caesar("D:\\Programming paradigms\\Caesar_Encryption_DLL\\DLLCaesar\\x64\\Debug\\DLLCaesar.dll");
-
-    char message[] = "HELLO everyone this is DLL work";
-    int key = 2;
-
-    char* encryptedMessage = caesar.Encrypt(message, key);
-    cout << "Encrypted Message: " << encryptedMessage << endl;
-
-    char* decryptedMessage = caesar.Decrypt(encryptedMessage, key);
-    cout << "Decrypted Message: " << decryptedMessage << endl;
+    TextEditor crypter;
+    crypter.run();
 
     return 0;
 }
