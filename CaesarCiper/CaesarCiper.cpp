@@ -335,7 +335,7 @@ public:
                 Text message;
                 Text messageEncrypted;
 
-                cout << "Enter an output file:" << endl;
+                cout << "Enter an input file:" << endl;
                 filename.append(false);
 
                 cout << "Enter a message:" << endl;
@@ -358,8 +358,22 @@ public:
                 }
             }
             else if (choice == 2) {
-                // Handle decryption
-                // Similar to encryption logic
+                Text filename;
+                Text messageDecrypted;
+
+                cout << "Enter an output file:" << endl;
+                filename.append(false);
+
+                cout << "Enter a key:" << endl;
+                cin >> key;
+
+                Text encrypted_message = loadFromFile(filename.get());
+
+                char* decrypted_message = ciper.Decrypt(encrypted_message.get(), key);
+                messageDecrypted.append(false, -1, decrypted_message, strlen(decrypted_message));
+                print(messageDecrypted);
+
+                delete[] decrypted_message;
             }
             else {
                 cerr << "Invalid choice" << endl;
