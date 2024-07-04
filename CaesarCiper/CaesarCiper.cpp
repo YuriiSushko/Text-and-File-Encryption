@@ -348,7 +348,7 @@ public:
 
                 if (encrypted_message != nullptr) {
                     messageEncrypted.append(false, -1, encrypted_message, strlen(encrypted_message));
-                    cout << messageEncrypted.getLength() << endl;
+
                     print(messageEncrypted);
                     saveToFile(filename.get(), messageEncrypted);
                     delete[] encrypted_message;
