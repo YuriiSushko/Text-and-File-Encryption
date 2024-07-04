@@ -11,13 +11,13 @@ This program allows users to encrypt and decrypt messages using a specified key.
     - Enter a long key for encryption and press `Enter`.
     - The encrypted message will be saved to `test500.txt`.
 
-    ![Step 1: Encrypt a Message](Screenshots/step1.png)
+    ![Step 1: Encrypt a Message](Screenshots/step1.jpg)
 
 2. **Verify Encrypted Message**
     - Close the program.
     - Open the file `test500.txt` to ensure the encrypted text is saved correctly.
 
-    ![Step 2: Verify Encrypted Message](Screenshots/step2.png)
+    ![Step 2: Verify Encrypted Message](Screenshots/step2.jpg)
 
 3. **Decrypt the Message**
     - Run the program again.
@@ -25,4 +25,4 @@ This program allows users to encrypt and decrypt messages using a specified key.
     - Enter the filename (`test500.txt`) and the key used for encryption.
     - Press `Enter` to see the decrypted message.
 
-    ![Step 3: Decrypt the Message](Screenshots/step3.png)
+    ![Step 3: Decrypt the Message](Screenshots/step3.jpg)
